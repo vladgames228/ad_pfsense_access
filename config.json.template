@@ -1,0 +1,4 @@
+{
+  "mapping": {"pfsense_alias": ["ad_group_1", "ad_group_2"]},
+  "ip_list": ["192.168.1.1", "192.168.1.2"]
+}
