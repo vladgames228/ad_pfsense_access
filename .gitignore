@@ -1,3 +1,5 @@
-.env
 __pycache__/
-.pyc
+*.py[codz]
+*$py.class
+.env
+psvdcd.py
