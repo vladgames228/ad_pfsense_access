@@ -1,4 +1,3 @@
-import os
 import json
 import asyncio
 import httpx
@@ -7,33 +6,18 @@ import xml.etree.ElementTree as ET
 import win32evtlog
 import logging
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+CONFIG_PATH = "config.json"
+DEBUG = False
 
-DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
-
-# Unified logging configuration
 log_level = logging.DEBUG if DEBUG else logging.INFO
 logging.basicConfig(
     level=log_level,
     format='%(asctime)s [%(levelname)s] %(message)s',
     handlers=[
-        logging.FileHandler("pfsense_sync.log", encoding='utf-8'),
+        logging.FileHandler("main.log", encoding='utf-8'),
         logging.StreamHandler()
     ]
 )
-
-PFSENSE_URL = os.getenv("PFSENSE_URL")
-API_KEY = os.getenv("PFSENSE_RESTAPI_KEY")
-
-if not PFSENSE_URL or not API_KEY:
-    logging.error("[MAIN] Missing PFSENSE_URL or PFSENSE_RESTAPI_KEY in environment variables.")
-    raise ValueError("pfSense parameters are not set.")
-
-CONFIG_PATH = "config.json"
 
 event_queue = asyncio.Queue()
 loop = None
@@ -229,6 +213,13 @@ async def main():
     
     logging.info("=== Starting AD -> pfSense Sync Service ===")
     load_config()
+    global PFSENSE_URL, API_KEY
+    PFSENSE_URL = config["PFSENSE_URL"]
+    API_KEY = config["PFSENSE_RESTAPI_KEY"]
+
+    if not PFSENSE_URL or not API_KEY:
+        logging.error("[MAIN] Missing PFSENSE_URL or PFSENSE_RESTAPI_KEY in environment variables.")
+        raise ValueError("pfSense parameters are not set.")
     await init_pfsense_state()
     
     logging.info("[MAIN] Initializing Windows Event subscription...")

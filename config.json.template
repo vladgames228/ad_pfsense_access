@@ -1,4 +1,11 @@
 {
-  "mapping": {"pfsense_alias": ["ad_group_1", "ad_group_2"]},
-  "ip_list": ["192.168.1.1", "192.168.1.2"]
+  "mapping": {
+    "pfsense_alias": ["ad_group_1", "ad_group_2"]
+  },
+  "ip_list": [
+    "192.168.1.1",
+    "192.168.1.2"
+  ],
+  "PFSENSE_URL": "https://192.168.1.1",
+  "PFSENSE_RESTAPI_KEY": "your_api_key_here"
 }
