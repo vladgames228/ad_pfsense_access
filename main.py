@@ -46,7 +46,7 @@ def load_config():
     try:
         with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
             config = json.load(f)
-        logging.info(f"[CONFIG] Configuration loaded. Allowed IPs count: {len(config.get('ip_list', []))}")
+        logging.debug(f"[CONFIG] Configuration loaded. Allowed IPs count: {len(config.get('ip_list', []))}")
     except Exception as e:
         logging.error(f"[CONFIG] Failed to load config: {e}")
         raise
@@ -71,15 +71,15 @@ def get_users_in_group(group: str) -> set:
 
 async def update_cache_periodically():
     while True:
-        logging.info("[CACHE] Refreshing AD group members...")
+        logging.debug("[CACHE] Refreshing AD group members...")
         for alias_name, groups in config.get('mapping', {}).items():
             all_users = set()
             for group in groups:
                 all_users.update(get_users_in_group(group))
             user_mapping[alias_name] = all_users
             logging.debug(f"[CACHE] Alias '{alias_name}': Cached {len(all_users)} authorized users.")
-        logging.info("[CACHE] AD cache update complete.")
-        logging.info("[CACHE] Refreshing config.json cache...")
+        logging.debug("[CACHE] AD cache update complete.")
+        logging.debug("[CACHE] Refreshing config.json cache...")
         load_config()
         await asyncio.sleep(600)
 
