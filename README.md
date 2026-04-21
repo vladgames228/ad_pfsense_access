@@ -15,7 +15,7 @@ On PfSense, you can set any rules for these aliases (e.g., special level access)
 5. Copy the RESTAPI key and paste it into `config.json`.
 6. Set the PfSense HTTPS URL in `config.json`.
 7. In the **"mapping"** section, set the keys (name of the alias) and values (list of AD groups whose users will be added to that alias).
-8. In the **"ip_list"** section, list the PCs on which this logic should work.
+8. In the **"ip_list"** section, list the PCs on which this logic should work. If empty, any IP allowed.
 9. Install [python.org](https://www.python.org/) on the DC.
 10. Run `install.bat` from the project folder. 
 
