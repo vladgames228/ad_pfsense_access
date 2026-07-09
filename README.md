@@ -1,6 +1,6 @@
 # AD to PfSense Access
 
-**Concept:** AD user logins to a PC, the Domain Controller (DC) catches which PC it was and sends an API request to PfSense that adds the IP address of that PC to a dedicated alias. When any other user logins to the same PC, the DC removes the previous IP from the alias. 
+**Concept:** AD user logins to a PC, the Domain Controller (DC) catches which PC it was and sends an API request to PfSense that adds the IP address of that PC to a dedicated alias. When any other user logins to the same PC, the DC removes the previous IP from the alias. That allows you to manage traffic rules not for set of IP's, but for whole user groups no matter on which IP they will appear in your network. It's like User-ID feature on Palo Alto's firewalls.
 
 On PfSense, you can set any rules for these aliases (e.g., special level access). To deploy, add the AD user to a dedicated AD group, configure `config.json`, and install the service. 
 
