@@ -1,8 +1,10 @@
 # AD to PfSense Access
 
-**Concept:** AD user logins to a PC, the Domain Controller (DC) catches which PC it was and sends an API request to PfSense that adds the IP address of that PC to a dedicated alias. When any other user logins to the same PC, the DC removes the previous IP from the alias. That allows you to manage traffic rules not for set of IP's, but for whole user groups no matter on which IP they will appear in your network. It's like User-ID feature on Palo Alto's firewalls.
+**Concept:** AD user logs into PC, the Domain Controller (DC) catches which PC it was and sends an API request to PfSense that adds the IP address of that PC to a dedicated alias. When any other user logins to the same PC, the DC removes the previous IP from the alias. That allows you to manage traffic rules not for a set of IPs, but for whole user groups no matter on which IP they will appear in your network. It's like the User-ID feature on Palo Alto firewalls.
 
 On PfSense, you can set any rules for these aliases (e.g., special level access). To deploy, add the AD user to a dedicated AD group, configure `config.json`, and install the service. 
+
+This is NOT a Captive Portal 2.0. Captive Portal is a different mechanism, it requires manual web authorization, and by default blocks all internet access in your network, affecting all devices. This tool affects only AD computers, and by default you can set basic access to the internet for all users, and special access for special users, like giving all admins access to the server subnet.
 
 **Note:** The service must catch AD logs, so it must be installed only on the Domain Controller!
 
@@ -15,14 +17,14 @@ On PfSense, you can set any rules for these aliases (e.g., special level access)
 5. Copy the RESTAPI key and paste it into `config.json`.
 6. Set the PfSense HTTPS URL in `config.json`.
 7. In the **"mapping"** section, set the keys (name of the alias) and values (list of AD groups whose users will be added to that alias).
-8. In the **"ip_list"** section, list the PCs on which this logic should work. If empty, any IP allowed.
+8. In the **"ip_list"** section, list the PCs on which this logic should work. If empty, any IP is allowed.
 9. Install [python.org](https://www.python.org/) on the DC.
 10. Run `install.bat` from the project folder. 
 
-The installer will create the `C:/Windows/AD_Pfsense_Access` folder, copy the necessary files, and create a service with the same name.
+The installer will create the `C:\Windows\AD_Pfsense_Access` folder, copy the necessary files, and create a service with the same name.
 
 ## Compatibility
 * Tested on Windows Server 2022 with AD level 2016.
 
 ## Contributing
-If you encounter any issues or have a suggestion, please contribute an issue.
+If you encounter any issues or have a suggestion, please open an issue.
