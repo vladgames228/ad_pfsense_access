@@ -1,0 +1,117 @@
+specification {
+    element agent
+    element system
+    element component
+    element log {
+        style {
+            shape document
+        }
+    }
+    element ui {
+        style {
+            shape browser
+        }
+    }
+    element db {
+        style {
+            shape storage
+            color gray
+            size small
+        }
+    }
+    element plugin_page
+}
+model {
+    LMS = ui {
+        style {
+            color muted
+        }
+    }
+    pfsense = system "pfSense" {
+        sqlite = db {
+            summary "Main config, all mappings"
+            description "SQLite file database, contains current mappings and core's settings"
+        }
+        core = component {
+            style {
+                color green
+            }
+            description "system's core, compilated python code for FreeBSD"
+
+
+            api_agent = component "API 6969/TCP" {
+                summary "API only for uploading mapping info"
+                description '''
+                    /mapping:
+                        GET 
+                '''
+            }
+            api_rules = component "API 6767/TCP" {
+                description "API for rules management"
+            }
+            api_agent -> sqlite
+            api_rules -> sqlite
+            api_rules -> config "pfsct"
+            LMS -> api_rules
+        }
+        plugin = ui {
+            style {
+                color green
+            }
+            description "Plugin on PHP"
+        }
+        config = db "config.xml"
+        plugin -> api_rules
+        core -> sqlite "all db access through core"
+        plugin -> config
+    }
+    ad_dc = system "AD DC" {
+        dc_agent = agent {
+            style {
+                color green
+            }
+            main = component "main.py"
+            agent_config = db "config.json"
+            nssm = component
+            ad_logs = log
+            main -> agent_config
+            ad_logs -> main
+            main -> api_agent "API" {
+                description '''
+                JSON
+                {
+                    "username": "IP"
+                }
+                '''
+            }
+        }
+        ldap = component "LDAP" {
+            core -> this
+        }
+    }
+}
+views {
+  view index {
+    include *
+  }
+  view extended {
+    title "Extended view"
+    include *
+    include ad_dc.*
+    include pfsense.*
+    include pfsense.core.api_agent
+    include pfsense.core.api_rules
+    include ad_dc.dc_agent.main
+  }
+  view of pfsense {
+    include *
+  }
+  view of core {
+    include *
+    include ad_dc.dc_agent.main
+  }
+  view of ad_dc {
+    include *
+    include dc_agent.*
+  }
+}
