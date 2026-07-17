@@ -42,13 +42,23 @@ model {
             api_agent = component "API 6969/TCP" {
                 summary "API only for uploading mapping info"
                 description '''
-                    /mapping:
-                        GET 
+                    POST `/api/mapping`
+                    ```json
+                    Authorization: Bearer <agent_token>
+                    Content-Type: application/json
+                    {
+                        "action": "logon",
+                        "username": "pipa228",
+                        "ip": "192.168.0.228",
+                        "groups": [],
+                        "timestamp": "2026-07-17T09:45:00Z"
+                    }
                 '''
             }
             api_rules = component "API 6767/TCP" {
                 description "API for rules management"
             }
+
             api_agent -> sqlite
             api_rules -> sqlite
             api_rules -> config "pfsct"

@@ -1,0 +1,6 @@
+agent:
+    WEF WEC GPO, redirecting required logs to DC
+    better filtering, transparent passthrough
+    ldap instead of powershell
+
+
